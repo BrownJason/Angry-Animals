@@ -1,13 +1,13 @@
 extends Node
 
 const DEFAULT_SCORE: int = 1000
-const SCORE_PATH = "user://animals.json"
+const SCORE_PATH = "user://animals_score.save"
 
 var _level_selected: int = 1
 var _level_scores: Dictionary = {
-	"1": 0,
-	"2": 0,
-	"3": 0	
+	"1": 1000,
+	"2": 1000,
+	"3": 1000	
 }
 
 func _ready():

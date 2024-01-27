@@ -1,5 +1,5 @@
 extends RigidBody2D
-
+const MAIN = preload("res://scenes/main/main.tscn")
 enum ANIMAL_STATE { READY, DRAG, RELEASE }
 
 const DRAG_LIM_MAX: Vector2 = Vector2(0, 60)
@@ -13,6 +13,8 @@ var _dragged_vector: Vector2 = Vector2.ZERO
 var _last_dragged_vector: Vector2 = Vector2.ZERO
 var _arrow_scale_x: float = 0.0
 var _last_collision_count: int = 0
+var _is_dragging: bool = false
+var _screen_drag_start: Vector2 = Vector2.ZERO
 
 @onready var arrow = $Arrow
 @onready var animal_state = $AnimalState
@@ -31,8 +33,6 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	update(delta)
-	animal_state.text = "%s\n" % ANIMAL_STATE.keys()[_state]
-	animal_state.text += "%.1f,%.1f" % [_dragged_vector.x, _dragged_vector.y]
 	
 
 func get_impulse() -> Vector2:
@@ -44,13 +44,6 @@ func update(delta: float) -> void:
 			update_drag()
 		ANIMAL_STATE.RELEASE:
 			update_flight()
-	
-func detect_release() -> bool:
-	if _state == ANIMAL_STATE.DRAG:
-		if Input.is_action_just_released("drag"):
-			set_new_state(ANIMAL_STATE.RELEASE)
-			return true
-	return false
 
 func set_release() -> void:
 	freeze = false
@@ -93,10 +86,10 @@ func drag_in_limits() -> void:
 
 func update_drag():
 	
-	if detect_release() == true:
+	if _is_dragging == true:
 		return
 	
-	var gmp = get_global_mouse_position()
+	var gmp = _screen_drag_start
 	_dragged_vector = get_dragged_vector(gmp)
 	play_stretch_sound()
 	drag_in_limits()
@@ -115,7 +108,7 @@ func set_new_state(new_state: ANIMAL_STATE) -> void:
 	if _state == ANIMAL_STATE.RELEASE:
 		set_release()
 	elif _state == ANIMAL_STATE.DRAG:
-		_drag_start =  get_global_mouse_position()
+		_drag_start =  _screen_drag_start
 		arrow.show()
 
 func update_ready():
@@ -128,9 +121,19 @@ func die() -> void:
 func _on_visible_on_screen_notifier_2d_screen_exited():
 	die()
 
-func _on_input_event(viewport, event, shape_idx):
-	if _state == ANIMAL_STATE.READY && event.is_action_pressed("drag"):
+func _input(event):
+	if _state == ANIMAL_STATE.READY && event is InputEventScreenDrag:
 		set_new_state(ANIMAL_STATE.DRAG)
+		
+	if event is InputEventScreenDrag:
+		_screen_drag_start.x = event.position.x - 120
+		_screen_drag_start.y = event.position.y - 360
+		
+	if _state == ANIMAL_STATE.DRAG:
+		if event is InputEventScreenTouch && event.is_released():
+			set_new_state(ANIMAL_STATE.RELEASE)
+			_is_dragging = true
+	_is_dragging = false
 
 func _on_sleeping_state_changed():
 	if sleeping:
