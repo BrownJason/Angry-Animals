@@ -52,6 +52,13 @@ func detect_release() -> bool:
 			return true
 	return false
 
+func set_release() -> void:
+	freeze = false
+	arrow.hide()
+	apply_central_impulse(get_impulse())
+	launch_sound.play()
+	SignalManager.on_attempt_made.emit()
+
 func scale_arrow() -> void:
 	var imp_len = get_impulse().length()
 	var perc= imp_len / IMPULSE_MAX
@@ -106,10 +113,7 @@ func update_flight() -> void:
 func set_new_state(new_state: ANIMAL_STATE) -> void:
 	_state = new_state
 	if _state == ANIMAL_STATE.RELEASE:
-		freeze = false
-		arrow.hide()
-		apply_central_impulse(get_impulse())
-		launch_sound.play()
+		set_release()
 	elif _state == ANIMAL_STATE.DRAG:
 		_drag_start =  get_global_mouse_position()
 		arrow.show()
