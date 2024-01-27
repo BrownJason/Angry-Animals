@@ -34,6 +34,7 @@ position = Vector2(-9.53674e-07, -9.53674e-07)
 scale = Vector2(2.1, 2.1)
 
 [node name="AnimalState" type="Label" parent="."]
+visible = false
 texture_filter = 1
 offset_left = -31.0
 offset_top = -50.0

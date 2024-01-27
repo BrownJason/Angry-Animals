@@ -1,12 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://djq41rmrglsd"]
+[gd_scene load_steps=7 format=3 uid="uid://djq41rmrglsd"]
 
 [ext_resource type="Texture2D" uid="uid://dysic73gdumjc" path="res://assets/scene/colored_castle.png" id="1_i2il0"]
 [ext_resource type="Script" path="res://scenes/level/level.gd" id="1_r3nhk"]
 [ext_resource type="PackedScene" uid="uid://u2tfsdvufm7p" path="res://scenes/water/water.tscn" id="2_rc4yf"]
-[ext_resource type="AudioStream" uid="uid://bvdn16wbovogo" path="res://assets/audio/jazzyfrenchy.mp3" id="4_doikf"]
+[ext_resource type="PackedScene" uid="uid://d4gjjjw86h6gv" path="res://scenes/scorer/scorer.tscn" id="5_alyq4"]
+[ext_resource type="PackedScene" uid="uid://cw0ho7y6y75fw" path="res://scenes/game_ui/game_ui.tscn" id="5_yxlwt"]
+[ext_resource type="PackedScene" uid="uid://cc2tw8dhgax4i" path="res://scenes/launch_area/launch_area.tscn" id="6_rbt0s"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_r3nhk")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GameUI" parent="CanvasLayer" instance=ExtResource("5_yxlwt")]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-67, -300)
@@ -21,5 +27,7 @@ position = Vector2(112, 346)
 z_index = 1
 position = Vector2(4, 616)
 
-[node name="BGMusic" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_doikf")
+[node name="Scorer" parent="." instance=ExtResource("5_alyq4")]
+
+[node name="LaunchArea" parent="." instance=ExtResource("6_rbt0s")]
+position = Vector2(50, 337)
