@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dysic73gdumjc" path="res://assets/scene/colored_castle.png" id="1_i2il0"]
 [ext_resource type="Script" path="res://scenes/level/level.gd" id="1_r3nhk"]
 [ext_resource type="PackedScene" uid="uid://u2tfsdvufm7p" path="res://scenes/water/water.tscn" id="2_rc4yf"]
-[ext_resource type="PackedScene" uid="uid://bx7sjos1nlvmh" path="res://scenes/cup/cup.tscn" id="4_s8hp6"]
+[ext_resource type="AudioStream" uid="uid://bvdn16wbovogo" path="res://assets/audio/jazzyfrenchy.mp3" id="4_doikf"]
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_r3nhk")
@@ -21,5 +21,5 @@ position = Vector2(112, 346)
 z_index = 1
 position = Vector2(4, 616)
 
-[node name="Cup" parent="." instance=ExtResource("4_s8hp6")]
-position = Vector2(686, 402)
+[node name="BGMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_doikf")
